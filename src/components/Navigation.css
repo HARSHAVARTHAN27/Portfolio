@@ -1,0 +1,89 @@
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 60px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  background: var(--nav-bg);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+  transition: all 0.3s ease;
+}
+
+.logo-img:hover {
+  border-color: var(--accent2);
+  transform: scale(1.05);
+}
+
+.nav-links {
+  display: flex; gap: 40px; list-style: none;
+}
+
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: -4px; left: 0; right: 0;
+  height: 1px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.snake-btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  margin-right: 12px;
+}
+
+.snake-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}

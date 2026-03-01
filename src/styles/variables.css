@@ -1,0 +1,29 @@
+:root {
+  --bg: #080000;
+  --bg2: #110000;
+  --accent: #ff1a1a;
+  --accent2: #ff6b35;
+  --accent3: #ff4d4d;
+  --text: #f0e8e8;
+  --muted: #664444;
+  --border: rgba(255,30,30,0.12);
+  --card-bg: rgba(255,20,20,0.05);
+  --nav-bg: rgba(8,0,0,0.75);
+  --input-bg: rgba(255,20,20,0.06);
+  --tag-bg: rgba(255,26,26,0.12);
+}
+
+:root.light {
+  --bg: #f0f6ff;
+  --bg2: #ffffff;
+  --accent: #0057ff;
+  --accent2: #0099ff;
+  --accent3: #00c8ff;
+  --text: #0a0f1e;
+  --muted: #5a6a8a;
+  --border: rgba(0,80,255,0.12);
+  --card-bg: rgba(0,80,255,0.04);
+  --nav-bg: rgba(240,246,255,0.85);
+  --input-bg: rgba(0,80,255,0.05);
+  --tag-bg: rgba(0,87,255,0.10);
+}

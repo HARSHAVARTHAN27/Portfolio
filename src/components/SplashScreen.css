@@ -1,0 +1,37 @@
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: var(--text);
+  font-family: 'Bebas Neue', sans-serif;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+.splash-screen.fade-out {
+  opacity: 0;
+}
+
+.splash-content {
+  text-align: center;
+}
+
+.splash-content h1 {
+  font-size: clamp(60px, 10vw, 150px);
+  letter-spacing: 5px;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.splash-content p {
+  font-size: clamp(20px, 4vw, 40px);
+  color: var(--muted);
+  letter-spacing: 2px;
+}
