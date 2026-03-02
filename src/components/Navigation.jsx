@@ -20,6 +20,12 @@ export function Navigation({ isDark, onThemeToggle, onPlaySnake }) {
     <>
       <nav>
       <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+        {/* Close button at top of mobile menu */}
+        <li className="menu-close-btn-wrapper">
+          <button className="menu-close-btn" onClick={closeMenu} aria-label="Close menu" title="Close menu">
+            ✕
+          </button>
+        </li>
         {["About", "Work", "Experience", "Contact"].map(l => (
           <li key={l}>
             <a href={`#${l.toLowerCase()}`} onClick={closeMenu}>{l}</a>
