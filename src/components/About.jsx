@@ -1,7 +1,9 @@
 import { skills } from '../data/skills';
-import profileImage from '../images/Gemini_Generated_Image_l3le4hl3le4hl3le (1).png';
+import profileDark from '../images/Gemini_Generated_Image_l3le4hl3le4hl3le (1).png';
+// fallback/light mode variant
+import profileLight from '../images/Gemini_Generated_Image_cpsaupcpsaupcpsa.png';
 
-export function About() {
+export function About({ isDark = true }) {
   return (
     <section className="section" id="about">
       <div className="about-container">
@@ -10,7 +12,7 @@ export function About() {
           <div className="photo-frame">
             <div className="photo-inner">
               <img 
-                src={profileImage}
+                src={isDark ? profileDark : profileLight}
                 alt="Profile"
               />
             </div>

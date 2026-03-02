@@ -86,4 +86,40 @@ body {
   .contact-info { flex-direction: column; gap: 32px; }
   .hero-vertical { display: none; }
   .nav-links { display: none; }
+
+  body {
+    cursor: auto;
+  }
+
+  .cursor,
+  .cursor-trail {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-size: 14px;
+    overflow-x: hidden;
+  }
+
+  nav { padding: 16px 16px; }
+  .hero { padding: 80px 16px 50px; }
+  .section { padding: 60px 16px; }
+
+  h1, h2, h3 {
+    word-break: break-word;
+  }
+
+  .section {
+    padding: 60px 16px;
+  }
+
+  .success-msg {
+    font-size: 11px;
+    padding: 20px 16px;
+    margin-top: 16px;
+  }
 }

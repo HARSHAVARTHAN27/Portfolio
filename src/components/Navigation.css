@@ -1,34 +1,27 @@
 nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 100;
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; align-items: center;
   padding: 24px 60px;
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(20px);
   background: var(--nav-bg);
 }
 
-.nav-logo {
+/* center links area and push controls right */
+.nav-links {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-controls {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 50px;
-  width: 50px;
+  gap: 12px;
 }
 
-.logo-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--accent);
-  transition: all 0.3s ease;
-}
 
-.logo-img:hover {
-  border-color: var(--accent2);
-  transform: scale(1.05);
-}
 
 .nav-links {
   display: flex; gap: 40px; list-style: none;
@@ -62,10 +55,15 @@ nav {
   color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  letter-spacing: 2px;
-  padding: 8px 16px;
+  letter-spacing: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  text-transform: uppercase;
   transition: all 0.3s;
   margin-right: 12px;
 }
@@ -86,4 +84,244 @@ nav {
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.3s;
+}
+
+.theme-toggle:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.snake-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.nav-menu-toggle {
+  display: none;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* hide the mobile button container by default; only show in mobile menu */
+.nav-buttons-container {
+  display: none;
+}
+
+/* theme pill styles (used inside nav-buttons) */
+
+/* Pill toggle */
+.theme-pill {
+  position: relative;
+  width: 70px;
+  height: 30px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 2px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.theme-pill .pill-knob {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-pill .pill-knob {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e6e9ee;
+  color: var(--muted);
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+/* Light appearance: knob on left, muted background */
+.theme-pill.light {
+  background: linear-gradient(90deg, #ffffff, #f3f4f6);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 0 0 3px rgba(34,34,34,0.1); /* subtle highlight when light preferred */
+}
+
+.theme-pill.light .pill-knob {
+  transform: translateX(0);
+  margin-left: 4px;
+  background: #bfc7d6;
+  color: #ffffff;
+}
+
+/* Dark appearance: knob on right, blue background */
+.theme-pill.dark {
+  background: linear-gradient(90deg, #2263ff, #1b4fe6);
+  border-color: rgba(34,99,255,0.15);
+}
+
+.theme-pill.dark .pill-knob {
+  transform: translateX(60px);
+  margin-left: 0;
+  background: #ffffff;
+  color: #2263ff;
+}
+
+.theme-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  color: var(--muted);
+  letter-spacing: 0.2px;
+}
+
+/* make label more prominent when light mode is active */
+.theme-pill.light + .theme-label,
+.nav-buttons .theme-pill.light + .theme-label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Hide the original nav theme button on desktop since we now have the pill */
+.theme-toggle { display: none; }
+
+/* desktop-only helper */
+.desktop-only { display: inline-block; }
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  nav {
+    padding: 16px 20px;
+    flex-wrap: wrap;
+  }
+  .nav-controls { display: none; }
+
+
+  .nav-menu-toggle {
+    display: flex;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-size: 28px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    order: 3;
+    margin-left: auto;
+    padding: 8px;
+    z-index: 101;
+    transition: all 0.3s;
+  }
+
+  .nav-menu-toggle:hover {
+    transform: scale(1.1);
+    color: var(--accent2);
+  }
+
+  .nav-links {
+    display: none;
+    gap: 0;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 75%;
+    max-width: 300px;
+    background: var(--nav-bg);
+    border-left: 1px solid var(--border);
+    padding: 80px 20px 20px 20px;
+    list-style: none;
+    backdrop-filter: blur(20px);
+    overflow-y: auto;
+    z-index: 105;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .nav-links.active {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .nav-links a {
+    font-size: 11px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-buttons-container {
+    display: block;
+    width: 100%;
+  }
+  .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .nav-buttons.active {
+    display: flex;
+  }
+
+  .snake-btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 10px;
+    margin-right: 0;
+    border: 1px solid var(--accent);
+  }
+
+  /* Make theme pill full width in mobile menu and show label */
+  .nav-buttons .theme-pill {
+    width: 100%;
+    height: 56px;
+    padding: 6px;
+    border-radius: 12px;
+  }
+
+  .nav-buttons .theme-pill .pill-knob { transform: translateX(0); }
+
+  .nav-buttons .theme-label { display: block; margin-left: 0; color: var(--muted); font-size: 14px; }
+  .nav-buttons .theme-pill-wrapper { display: flex; flex-direction: column; gap: 8px; }
+  .theme-label.desktop-only { display: none; }
+}
+
+@media (max-width: 480px) {
+  nav {
+    padding: 12px 16px;
+  }
+
+
+  .nav-menu-toggle {
+    font-size: 26px;
+    padding: 10px;
+  }
+
+  .nav-buttons {
+    left: 16px;
+    right: 16px;
+    width: calc(100% - 32px);
+    padding: 8px 0 16px 0;
+    top: 200px;
+  }
+
+  .snake-btn,
+  .theme-pill {
+    padding: 8px 12px;
+  }
+  .snake-btn {
+    padding: 8px 12px;
+    font-size: 9px;
+  }
+  .theme-label.desktop-only { display: none; }
 }

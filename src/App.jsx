@@ -57,7 +57,8 @@ export default function App() {
 
       <Navigation isDark={isDark} onThemeToggle={handleThemeToggle} onPlaySnake={handlePlaySnake} />
       <Hero />
-      <About />
+      {/* pass theme state to About so the profile image can change when the theme toggles */}
+      <About isDark={isDark} />
       <Projects />
       <Experience />
       <Contact />

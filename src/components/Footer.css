@@ -27,3 +27,48 @@ footer {
 }
 
 .social-links a:hover { color: var(--accent); }
+
+/* Mobile Footer */
+@media (max-width: 768px) {
+  footer {
+    padding: 30px 24px;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .footer-copy {
+    font-size: 10px;
+    order: 2;
+  }
+
+  .social-links {
+    gap: 16px;
+    order: 1;
+  }
+
+  .social-links a {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  footer {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .footer-copy {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .social-links {
+    gap: 12px;
+  }
+
+  .social-links a {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+}

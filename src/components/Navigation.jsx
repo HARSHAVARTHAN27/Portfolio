@@ -1,35 +1,89 @@
-import logoImg from '../images/Gemini_Generated_Image_cpsaupcpsaupcpsa.png';
+import { useState } from 'react';
 
 export function Navigation({ isDark, onThemeToggle, onPlaySnake }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const handleSnakeClick = () => {
+    onPlaySnake();
+    closeMenu();
+  };
+
   return (
-    <nav>
-      <div className="nav-logo">
-        <img src={logoImg} alt="Logo" className="logo-img" />
-      </div>
-      <ul className="nav-links">
+    <>
+      <nav>
+      <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
         {["About", "Work", "Experience", "Contact"].map(l => (
           <li key={l}>
-            <a href={`#${l.toLowerCase()}`}>{l}</a>
+            <a href={`#${l.toLowerCase()}`} onClick={closeMenu}>{l}</a>
           </li>
         ))}
+        {/* mobile-only container for buttons */}
+        <li className="nav-buttons-container">
+          <div className="nav-buttons">
+            <button
+              onClick={handleSnakeClick}
+              className="snake-btn"
+              title="Play Snake Game"
+              onMouseOver={e => { e.target.style.background = "var(--accent)"; e.target.style.color = "var(--bg)"; }}
+              onMouseOut={e => { e.target.style.background = "transparent"; e.target.style.color = "var(--accent)"; }}
+            >
+              🐍
+            </button>
+            <div className="theme-pill-wrapper">
+              <button
+                className={`theme-pill ${isDark ? 'light' : 'dark'}`}
+                onClick={onThemeToggle}
+                aria-pressed={isDark}
+                aria-label="Toggle theme"
+                title="Toggle theme"
+              >
+                <span className="pill-knob">{isDark ? '☀' : '☾'}</span>
+              </button>
+              <span className="theme-label desktop-only">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+            </div>
+          </div>
+        </li>
       </ul>
-      <button
-        onClick={onPlaySnake}
-        className="snake-btn"
-        title="Play Snake Game"
-        onMouseOver={e => { e.target.style.background = "var(--accent)"; e.target.style.color = "var(--bg)"; }}
-        onMouseOut={e => { e.target.style.background = "transparent"; e.target.style.color = "var(--accent)"; }}
-      >
-        🐍 Snake
+
+      {/* desktop controls group (hidden on mobile) */}
+      <div className="nav-controls">
+        <button
+          onClick={handleSnakeClick}
+          className="snake-btn"
+          title="Play Snake Game"
+          onMouseOver={e => { e.target.style.background = "var(--accent)"; e.target.style.color = "var(--bg)"; }}
+          onMouseOut={e => { e.target.style.background = "transparent"; e.target.style.color = "var(--accent)"; }}
+        >
+          🐍
+        </button>
+        <div className="theme-pill-wrapper">
+          <button
+            className={`theme-pill ${isDark ? 'light' : 'dark'}`}
+            onClick={onThemeToggle}
+            aria-pressed={isDark}
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <span className="pill-knob">{isDark ? '☀' : '☾'}</span>
+          </button>
+          <span className="theme-label desktop-only">{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+        </div>
+      </div>
+
+      <button className="nav-menu-toggle" onClick={toggleMenu}>
+        {isMenuOpen ? '✕' : '☰'}
       </button>
-      <button
-        onClick={onThemeToggle}
-        className="theme-toggle"
-        onMouseOver={e => { e.target.style.background = "var(--accent)"; e.target.style.color = "var(--bg)"; }}
-        onMouseOut={e => { e.target.style.background = "transparent"; e.target.style.color = "var(--accent)"; }}
-      >
-        {isDark ? "☀ Light" : "☾ Dark"}
-      </button>
-    </nav>
+      </nav>
+
+      {/* removed floating button and separate wrapper; theme pill is inside nav-buttons */}
+    </>
   );
 }

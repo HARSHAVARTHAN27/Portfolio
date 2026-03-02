@@ -63,3 +63,55 @@
   white-space: nowrap;
   align-self: start;
 }
+
+/* Mobile Experience */
+@media (max-width: 768px) {
+  .exp-item {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .exp-period {
+    font-size: 11px;
+    padding-top: 0;
+  }
+
+  .exp-role {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .exp-company {
+    font-size: 11px;
+    margin-bottom: 12px;
+  }
+
+  .exp-desc {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  .exp-badge {
+    font-size: 9px;
+    padding: 6px 12px;
+    align-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .exp-item {
+    padding: 20px 0;
+  }
+
+  .exp-role {
+    font-size: 18px;
+  }
+
+  .exp-desc {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}

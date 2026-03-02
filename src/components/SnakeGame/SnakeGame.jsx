@@ -24,6 +24,15 @@ export function SnakeGame() {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const gameIntervalRef = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0 });
+
+  // Handle direction change
+  const changeDirection = (newDir) => {
+    // Prevent reversing into self
+    if (direction.x !== -newDir.x || direction.y !== -newDir.y) {
+      setNextDirection(newDir);
+    }
+  };
 
   // Handle key input
   useEffect(() => {
@@ -39,16 +48,52 @@ export function SnakeGame() {
         'ArrowRight': { x: 1, y: 0 }
       };
 
-      const newDir = keyMap[e.key];
-      
-      // Prevent reversing into self
-      if (direction.x !== -newDir.x || direction.y !== -newDir.y) {
-        setNextDirection(newDir);
-      }
+      changeDirection(keyMap[e.key]);
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [direction]);
+
+  // Handle touch/swipe
+  useEffect(() => {
+    const handleTouchStart = (e) => {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY
+      };
+    };
+
+    const handleTouchEnd = (e) => {
+      const touchEnd = {
+        x: e.changedTouches[0].clientX,
+        y: e.changedTouches[0].clientY
+      };
+
+      const dx = touchEnd.x - touchStartRef.current.x;
+      const dy = touchEnd.y - touchStartRef.current.y;
+
+      const minSwipeDistance = 30;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal swipe
+        if (Math.abs(dx) > minSwipeDistance) {
+          changeDirection(dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 }); // Right or Left
+        }
+      } else {
+        // Vertical swipe
+        if (Math.abs(dy) > minSwipeDistance) {
+          changeDirection(dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 }); // Down or Up
+        }
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
   }, [direction]);
 
   // Game loop
@@ -158,6 +203,40 @@ export function SnakeGame() {
             <button onClick={resetGame}>Play Again</button>
           </div>
         )}
+      </div>
+
+      {/* Mobile Control Buttons */}
+      <div className="mobile-controls">
+        <button
+          className="control-btn up"
+          onClick={() => changeDirection({ x: 0, y: -1 })}
+          aria-label="Up"
+        >
+          ▲
+        </button>
+        <div className="controls-row">
+          <button
+            className="control-btn left"
+            onClick={() => changeDirection({ x: -1, y: 0 })}
+            aria-label="Left"
+          >
+            ◄
+          </button>
+          <button
+            className="control-btn down"
+            onClick={() => changeDirection({ x: 0, y: 1 })}
+            aria-label="Down"
+          >
+            ▼
+          </button>
+          <button
+            className="control-btn right"
+            onClick={() => changeDirection({ x: 1, y: 0 })}
+            aria-label="Right"
+          >
+            ►
+          </button>
+        </div>
       </div>
     </div>
   );
