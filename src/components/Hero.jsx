@@ -33,9 +33,13 @@ export function Hero() {
       </div>
 
       <div className="hero-vertical">
-        {"BUILD CODE SOLVE REPEAT".split("").map((c, i) => (
-          <span key={i}>{c}</span>
-        ))}
+        <span className="vert-word">BUILD</span>
+        <span className="vert-dot">·</span>
+        <span className="vert-word accent">CODE</span>
+        <span className="vert-dot">·</span>
+        <span className="vert-word">SOLVE</span>
+        <span className="vert-dot">·</span>
+        <span className="vert-word accent">REPEAT</span>
       </div>
 
       <p className="hero-desc reveal">

@@ -50,21 +50,46 @@
 .hero-name .line3 { color: var(--accent); display: block; }
 
 .hero-vertical {
-  position: absolute; right: 60px; top: 50%;
-  transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 0;
-  writing-mode: vertical-rl;
+  position: absolute;
+  right: -60px;      /* offset to account for rotation */
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center center;
+  display: flex;
+  flex-direction: row;  /* words flow left-to-right BEFORE rotation */
+  align-items: center;
+  gap: 16px;
+  writing-mode: horizontal-tb; /* words stay fully legible */
+  white-space: nowrap;
 }
 
 .hero-vertical span {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 8px;
+  font-size: 13px;
+  letter-spacing: 6px;
   color: var(--muted);
   transition: color 0.3s;
 }
 
-.hero-vertical span:nth-child(3n) { color: var(--accent3); }
+.hero-vertical .vert-word {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 6px;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+
+.hero-vertical .vert-word.accent {
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(255, 30, 30, 0.5);
+}
+
+.hero-vertical .vert-dot {
+  font-size: 18px;
+  color: var(--accent);
+  opacity: 0.35;
+  line-height: 1;
+}
 
 .hero-desc {
   font-size: 16px;
