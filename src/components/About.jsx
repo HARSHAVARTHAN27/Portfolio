@@ -1,4 +1,4 @@
-import { skills } from '../data/skills';
+
 import profileDark from '../images/Gemini_Generated_Image_l3le4hl3le4hl3le (1).png';
 // fallback/light mode variant
 import profileLight from '../images/Gemini_Generated_Image_cpsaupcpsaupcpsa.png';
@@ -56,14 +56,6 @@ export function About({ isDark = true }) {
                   <div className="stat-num">{s.num}</div>
                   <div className="stat-label">{s.label}</div>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="reveal">
-            <div className="skills-row">
-              {skills.map(s => (
-                <div className="skill-pill" key={s}>{s}</div>
               ))}
             </div>
           </div>

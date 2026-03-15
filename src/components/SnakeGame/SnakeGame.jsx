@@ -22,6 +22,9 @@ export function SnakeGame() {
   const [direction, setDirection] = useState(INITIAL_DIRECTION);
   const [nextDirection, setNextDirection] = useState(INITIAL_DIRECTION);
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    return parseInt(localStorage.getItem('snakeHighScore')) || 0;
+  });
   const [gameOver, setGameOver] = useState(false);
   const gameIntervalRef = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0 });
@@ -96,9 +99,20 @@ export function SnakeGame() {
     };
   }, [direction]);
 
+  // High Score Effect
+  useEffect(() => {
+    if (gameOver && score > highScore) {
+      setHighScore(score);
+      localStorage.setItem('snakeHighScore', score.toString());
+    }
+  }, [gameOver, score, highScore]);
+
   // Game loop
   useEffect(() => {
     if (gameOver) return;
+
+    // Speed increases slightly as score increases
+    const currentSpeed = Math.max(60, GAME_SPEED - (score * 5));
 
     gameIntervalRef.current = setInterval(() => {
       setSnake(prevSnake => {
@@ -150,10 +164,10 @@ export function SnakeGame() {
 
         return newSnake;
       });
-    }, GAME_SPEED);
+    }, currentSpeed);
 
     return () => clearInterval(gameIntervalRef.current);
-  }, [gameOver, food, direction, nextDirection]);
+  }, [gameOver, food, direction, nextDirection, score]);
 
   const resetGame = () => {
     setSnake(INITIAL_SNAKE);
@@ -197,46 +211,13 @@ export function SnakeGame() {
       </div>
       <div className="game-info">
         <p>Score: {score}</p>
+        <p style={{ fontSize: '14px', color: 'var(--muted)' }}>High Score: {highScore}</p>
         {gameOver && (
           <div className="game-over">
             <h3>Game Over!</h3>
             <button onClick={resetGame}>Play Again</button>
           </div>
         )}
-      </div>
-
-      {/* Mobile Control Buttons */}
-      <div className="mobile-controls">
-        <button
-          className="control-btn up"
-          onClick={() => changeDirection({ x: 0, y: -1 })}
-          aria-label="Up"
-        >
-          ▲
-        </button>
-        <div className="controls-row">
-          <button
-            className="control-btn left"
-            onClick={() => changeDirection({ x: -1, y: 0 })}
-            aria-label="Left"
-          >
-            ◄
-          </button>
-          <button
-            className="control-btn down"
-            onClick={() => changeDirection({ x: 0, y: 1 })}
-            aria-label="Down"
-          >
-            ▼
-          </button>
-          <button
-            className="control-btn right"
-            onClick={() => changeDirection({ x: 1, y: 0 })}
-            aria-label="Right"
-          >
-            ►
-          </button>
-        </div>
       </div>
     </div>
   );

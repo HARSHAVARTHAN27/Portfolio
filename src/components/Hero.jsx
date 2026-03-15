@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Github, Linkedin, Instagram, Mail } from 'lucide-react';
 
 export function Hero() {
   const [downloading, setDownloading] = useState(false);
@@ -47,6 +48,22 @@ export function Hero() {
         <button onClick={handleDownloadCV} className="btn-outline" disabled={downloading}>
           {downloading ? "Downloading..." : "Download CV"}
         </button>
+      </div>
+
+      {/* Social Media Links */}
+      <div className="hero-social reveal">
+        <a href="https://github.com/HARSHAVARTHAN27" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="GitHub">
+          <Github size={20} />
+        </a>
+        <a href="https://www.linkedin.com/in/harshavarthan-s-31662b252/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="LinkedIn">
+          <Linkedin size={20} />
+        </a>
+        <a href="https://www.instagram.com/harshavarthan_official_/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Instagram">
+          <Instagram size={20} />
+        </a>
+        <a href="mailto:your@email.com" className="social-btn" aria-label="Email">
+          <Mail size={20} />
+        </a>
       </div>
 
       <div className="measure-lines">

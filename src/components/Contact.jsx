@@ -1,5 +1,5 @@
 import { useState } from 'react';
-// emailjs removed, using mailto fallback
+import emailjs from '@emailjs/browser';
 
 export function Contact() {
   const [formData, setFormData] = useState({ 
@@ -18,19 +18,31 @@ export function Contact() {
     setSending(true);
     setError("");
 
-    const mailtoLink = `mailto:harshavarthanshan027@gmail.com?subject=${encodeURIComponent(
-      formData.subject || "Portfolio Contact from " + formData.name
-    )}&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    )}`;
-    
-    window.location.href = mailtoLink;
-    
-    setTimeout(() => {
+    emailjs.send(
+      'service_lop5e19',
+      'template_vc5sssm',
+      {
+        from_name: formData.name,
+        reply_to: formData.email,
+        message: formData.message,
+        to_email: "harshavarthanshan027@gmail.com",
+        subject: formData.subject || "Portfolio Contact Form"
+      },
+      'Q3cjOkJvUA8O-KLMH'
+    ).then(() => {
       setSending(false);
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 800);
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 5000);
+    }).catch((err) => {
+      console.error("EmailJS Error:", err);
+      setSending(false);
+      setError("Failed to send message. Please try again or use the email link directly.");
+    });
   };
 
   return (
@@ -102,12 +114,17 @@ export function Contact() {
         </div>
         <div className="form-submit">
           <button type="submit" className="btn-submit" disabled={sending}>
-            <span>{sending ? "Opening Mail..." : "Send Message →"}</span>
+            <span>{sending ? "Sending Message..." : "Send Message →"}</span>
           </button>
         </div>
+        {error && (
+          <div className="error-msg" style={{ color: '#ff4444', marginTop: '10px' }}>
+            {error}
+          </div>
+        )}
         {submitted && (
           <div className="success-msg">
-            ✓ Your mail client has been opened — message ready to send!
+            ✓ Message sent successfully! I will get back to you soon.
           </div>
         )}
       </form>

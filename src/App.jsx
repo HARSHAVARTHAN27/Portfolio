@@ -6,6 +6,7 @@ import './components/Hero.css';
 import './components/About.css';
 import './components/Projects.css';
 import './components/Experience.css';
+import './components/Skills.css';
 import './components/Contact.css';
 import './components/Footer.css';
 import './components/ChatBot.css';
@@ -16,6 +17,7 @@ import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Projects } from './components/Projects';
 import { Experience } from './components/Experience';
+import { Skills } from './components/Skills';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { ChatBot } from './components/ChatBot';
@@ -61,6 +63,7 @@ export default function App() {
       <About isDark={isDark} />
       <Projects />
       <Experience />
+      <Skills />
       <Contact />
       <Footer />
       <ChatBot />

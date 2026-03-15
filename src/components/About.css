@@ -78,44 +78,7 @@
   font-weight: 700;
 }
 
-.skills-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
-}
 
-.skill-pill {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 2px;
-  padding: 8px 18px;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  text-transform: uppercase;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-
-.skill-pill::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--accent);
-  transform: translateX(-100%);
-  transition: transform 0.3s;
-  z-index: -1;
-}
-
-.skill-pill:hover {
-  color: var(--bg);
-  border-color: var(--accent);
-}
-
-.skill-pill:hover::before {
-  transform: translateX(0);
-}
 
 .stats-block {
   display: grid;
@@ -207,15 +170,6 @@
     line-height: 1.6;
   }
 
-  .skills-row {
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  .skill-pill {
-    font-size: 10px;
-    padding: 6px 14px;
-  }
 
   .stats-block {
     grid-template-columns: 1fr;
@@ -273,15 +227,6 @@
     line-height: 1.5;
   }
 
-  .skills-row {
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .skill-pill {
-    font-size: 9px;
-    padding: 5px 12px;
-  }
 
   .stats-block {
     gap: 0;

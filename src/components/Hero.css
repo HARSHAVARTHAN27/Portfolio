@@ -133,6 +133,59 @@
   color: var(--text);
 }
 
+/* === SOCIAL MEDIA BUTTONS === */
+.hero-social {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+}
+
+.social-btn svg {
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s;
+}
+
+.social-btn:hover {
+  border-color: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(255, 30, 30, 0.4), 0 0 40px rgba(255, 30, 30, 0.2);
+  transform: translateY(-4px);
+}
+
+.social-btn:hover::before {
+  transform: scale(1);
+}
+
 .measure-lines {
   position: absolute; bottom: 40px; left: 60px;
   display: flex; align-items: flex-end; gap: 0;

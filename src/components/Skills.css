@@ -1,0 +1,372 @@
+/* ULTIMATE 3D MECHANICAL KEYBOARD SKILLS SECTION */
+
+.skills-container {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.mechanical-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the whole board */
+  gap: 24px;
+  padding: 40px 0;
+  perspective: 1500px;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* 
+ * Keyboard Stagger Setup: real typing keyboards offset 
+ * rows to fit keys diagonally. 
+ */
+.row-2 { margin-left: 20px; }
+.row-3 { margin-left: -20px; }
+.row-4 { margin-left: 40px; }
+
+.key-wrapper {
+  position: relative;
+  display: inline-block;
+  transform-style: preserve-3d;
+  -webkit-tap-highlight-color: transparent;
+  /* Floating animation */
+  animation: floatKey 6s ease-in-out infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes floatKey {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* The physical keycap outer shell */
+.keycap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 26px;
+  background: color-mix(in srgb, var(--key-color) 35%, #2a2a2a); /* Vibrantly tinted lighter base */
+  color: var(--text); /* Bright white/off-white text */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  
+  /* Create the 3D top bevel & depth (no ambient underglow) */
+  box-shadow: 
+    inset 2px 2px 3px rgba(255, 255, 255, 0.08),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.6),
+    0 10px 0 #080808, /* 10px side wall */
+    0 14px 18px rgba(0, 0, 0, 0.6);
+  
+  transform: translateY(0);
+  transition: all 0.2s cubic-bezier(0.1, 0.7, 0.1, 1);
+}
+
+/* Inner concave well (finger indent) */
+.keycap::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 6px;
+  background: inherit; /* Inherit base keycap color */
+  border-radius: 6px;
+  z-index: 0;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  filter: brightness(0.9); /* Slightly darker for convex depth */
+}
+
+.key-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; /* space between icon and text */
+}
+
+/* Base icon & text styles */
+.skill-icon {
+  color: color-mix(in srgb, var(--text) 80%, transparent); /* Bright but slightly softened icon */
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8));
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.key-text {
+  text-shadow: none; /* remove permanent glow */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === HOVER STATE: Partial press & Intense Glow === */
+.key-wrapper:hover .keycap {
+  transform: translateY(4px); /* depress partially */
+  color: #fff;
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.9),
+    0 6px 0 #000, /* shorter side wall */
+    0 0 30px 10px var(--key-color), /* Tight bright halo */
+    0 10px 80px 30px var(--key-color); /* Massive ambient outer background glow */
+  z-index: 10; /* Bring it above neighbors so the glow casts perfectly */
+}
+
+.key-wrapper:hover .keycap::after {
+  background: color-mix(in srgb, var(--key-color) 45%, #333);
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.3); 
+}
+
+.key-wrapper:hover .key-text {
+  text-shadow: 
+    0 0 10px var(--key-color),
+    0 0 20px var(--key-color),
+    0 0 40px var(--key-color);
+}
+
+.key-wrapper:hover .skill-icon {
+  color: #fff;
+  filter: 
+    drop-shadow(0 0 5px var(--key-color))
+    drop-shadow(0 0 15px var(--key-color));
+}
+
+/* === ACTIVE STATE: Fully bottomed out === */
+.key-wrapper:active .keycap {
+  transform: translateY(10px); /* full bottom out */
+  box-shadow: 
+    inset 2px 2px 6px rgba(0, 0, 0, 0.9),
+    inset -2px -2px 2px rgba(255, 255, 255, 0.05),
+    0 0 0 #000, /* no side wall */
+    0 0 40px 15px var(--key-color), /* bright localized glow */
+    0 0 100px 40px var(--key-color); /* massive explosion blast glow over the board */
+  transition: all 0.05s linear;
+  z-index: 10; /* Keep it on top during click */
+}
+
+.key-wrapper:active .keycap::after {
+  background: color-mix(in srgb, var(--key-color) 55%, #1a1a1a);
+  box-shadow: inset 0 0 18px rgba(0,0,0,0.6);
+  filter: brightness(0.85);
+}
+
+.key-wrapper:active .key-text {
+  color: var(--key-color);
+  text-shadow: 
+    0 0 10px var(--key-color),
+    0 0 30px var(--key-color);
+}
+
+.key-wrapper:active .skill-icon {
+  color: var(--key-color);
+  filter: 
+    drop-shadow(0 0 10px var(--key-color))
+    drop-shadow(0 0 25px var(--key-color));
+  transition: all 0.05s linear;
+}
+
+/* === LIGHT MODE OVERRIDES === */
+html.light .keycap {
+  background: color-mix(in srgb, var(--key-color) 20%, #fdfdfd); /* Increased tint on light mode */
+  color: var(--text);
+  box-shadow: 
+    inset 2px 2px 3px rgba(255,255,255,0.8),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.08),
+    0 10px 0 #d9d9d9,
+    0 14px 18px rgba(0, 0, 0, 0.1);
+}
+
+html.light .keycap::after {
+  background: inherit;
+  filter: brightness(0.95);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+}
+
+html.light .key-text {
+  text-shadow: 0 1px 1px #fff;
+}
+
+html.light .skill-icon {
+  color: color-mix(in srgb, var(--text) 80%, transparent);
+  filter: drop-shadow(0 1px 1px #fff);
+}
+
+html.light .key-wrapper:hover .keycap {
+  color: #fff;
+  box-shadow: 
+    inset 2px 2px 4px #fff,
+    inset -2px -2px 4px rgba(0, 0, 0, 0.1),
+    0 6px 0 #c0c0c0, 
+    0 0 30px 5px var(--key-color),
+    0 10px 80px 20px var(--key-color);
+  z-index: 10;
+}
+
+html.light .key-wrapper:hover .keycap::after {
+  background: color-mix(in srgb, var(--key-color) 25%, #f5f5f5);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+html.light .key-wrapper:hover .key-text {
+  text-shadow: 
+    0 0 10px var(--key-color),
+    0 0 20px var(--key-color);
+}
+
+html.light .key-wrapper:hover .skill-icon {
+  color: #fff;
+  filter: drop-shadow(0 0 10px var(--key-color));
+}
+
+html.light .key-wrapper:active .keycap {
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.1),
+    inset -2px -2px 2px #fff,
+    0 0 0 #b0b0b0,
+    0 0 40px 10px var(--key-color),
+    0 0 100px 30px var(--key-color);
+  z-index: 10;
+}
+
+html.light .key-wrapper:active .keycap::after {
+  background: color-mix(in srgb, var(--key-color) 25%, #e0e0e0);
+  filter: brightness(0.9);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.12);
+}
+
+html.light .key-wrapper:active .skill-icon {
+  color: var(--key-color);
+  filter: drop-shadow(0 0 10px var(--key-color));
+}
+
+/* === MOBILE Adjustments === */
+@media (max-width: 768px) {
+  .mechanical-board {
+    gap: 12px;
+    padding: 20px 0;
+  }
+  
+  .keyboard-row {
+    flex-wrap: wrap; /* Let them wrap instead of strictly staggering on narrow screens */
+    gap: 12px;
+    margin-left: 0 !important; /* disable stagger on mobile to prevent overflow */
+  }
+
+  .key-content {
+    gap: 6px;
+  }
+
+  .skill-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .keycap {
+    padding: 10px 16px;
+    font-size: 11px;
+    border-radius: 8px;
+    box-shadow: 
+      inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.9),
+      0 6px 0 #050505,
+      0 8px 10px rgba(0, 0, 0, 0.7);
+  }
+
+  .keycap::after {
+    border-radius: 4px;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 4px;
+  }
+
+  .key-wrapper:hover .keycap {
+    transform: translateY(2px);
+    box-shadow: 
+      inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.9),
+      0 4px 0 #000,
+      0 0 20px 8px var(--key-color),
+      0 8px 40px 15px var(--key-color);
+    z-index: 10;
+  }
+
+  .key-wrapper:active .keycap {
+    transform: translateY(6px);
+    box-shadow: 
+      inset 2px 2px 5px rgba(0, 0, 0, 0.9),
+      0 0 0 #000,
+      0 0 25px 10px var(--key-color),
+      0 0 50px 20px var(--key-color);
+    z-index: 10;
+  }
+}
+
+@media (max-width: 480px) {
+  .mechanical-board {
+    gap: 8px;
+  }
+
+  .keyboard-row {
+    gap: 8px;
+  }
+  
+  .key-content {
+    gap: 4px;
+  }
+
+  .skill-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .keycap {
+    padding: 8px 12px;
+    font-size: 9px;
+    border-radius: 6px;
+    box-shadow: 
+      inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.9),
+      0 4px 0 #050505,
+      0 6px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  .keycap::after {
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 3px;
+  }
+
+  .key-wrapper:hover .keycap {
+    transform: translateY(2px);
+    box-shadow: 
+      inset 1px 1px 2px rgba(255, 255, 255, 0.1),
+      inset -1px -1px 2px rgba(0, 0, 0, 0.9),
+      0 2px 0 #000,
+      0 0 15px 5px var(--key-color),
+      0 6px 30px 10px var(--key-color);
+    z-index: 10;
+  }
+
+  .key-wrapper:active .keycap {
+    transform: translateY(4px);
+    box-shadow: 
+      inset 2px 2px 5px rgba(0, 0, 0, 0.9),
+      0 0 0 #000,
+      0 0 20px 8px var(--key-color),
+      0 0 40px 15px var(--key-color);
+    z-index: 10;
+  }
+}
