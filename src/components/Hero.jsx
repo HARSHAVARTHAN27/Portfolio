@@ -65,7 +65,7 @@ export function Hero() {
         <a href="https://www.instagram.com/harshavarthan_official_/" target="_blank" rel="noopener noreferrer" className="social-btn" aria-label="Instagram">
           <Instagram size={20} />
         </a>
-        <a href="mailto:your@email.com" className="social-btn" aria-label="Email">
+        <a href="mailto:harshavarthanshan027@gmail.com" className="social-btn" aria-label="Email">
           <Mail size={20} />
         </a>
       </div>
