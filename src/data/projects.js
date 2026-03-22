@@ -2,36 +2,71 @@ export const projects = [
   {
     num: "01",
     title: "FARMER ADVISORY SYSTEM",
+    subtitle: "AI-Powered Agriculture App",
+    shortTitle: "Advisory System",
     desc: "AI-powered mobile application that helps farmers with crop suggestions, subsidy tracking, and real-time updates using Aadhaar authentication and integrated government services.",
+    challenge: "Farmers lacked a unified platform for crop advice matching their local climate, along with hard-to-navigate government subsidy programs.",
+    resolution: "Built a React Native application backed by a Node.js API with AI-based chatbots to natively process inquiries alongside a responsive Aadhaar-linked tracking system.",
+    role: "Full Stack Developer",
+    category: "Mobile App",
     tags: ["React Native", "Node.js", "MongoDB", "AI Chatbot"],
-    link: "#"
+    link: "#",
+    image: "https://images.unsplash.com/photo-1592982537447-6f23f5c90b6a?w=800&q=80"
   },
   {
     num: "02",
     title: "COLLEGE ENQUIRY CHATBOT",
+    subtitle: "Automated Student Query Handling",
+    shortTitle: "Enquiry Chatbot",
     desc: "Smart chatbot platform designed to handle student queries with instant responses, secure login, and database integration for efficient information retrieval.",
+    challenge: "University offices were overwhelmed handling repetitive questions regarding admissions, courses, and schedules.",
+    resolution: "Developed an intelligent NLP-powered chatbot using Flask and React that parses queries contextually, integrating directly with MongoDB for instant database retrieval.",
+    role: "Backend & ML Engineer",
+    category: "AI / Web",
     tags: ["React", "Flask", "MongoDB", "NLP"],
-    link: "#"
+    link: "#",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80"
   },
   {
     num: "03",
     title: "AIR & WATER QUALITY MONITOR",
+    subtitle: "IoT Environmental Dashboard",
+    shortTitle: "Quality Monitor",
     desc: "IoT-based monitoring system that collects real-time environmental data using sensors and displays pollution levels through a connected cloud dashboard.",
+    challenge: "Lack of affordable real-time local monitoring for environmental factors like air and water toxins.",
+    resolution: "Engineered a low-cost IoT monitor using ESP8266 processors and analog sensors, seamlessly writing to a cloud ecosystem visualized through Blynk.",
+    role: "IoT Engineer",
+    category: "Hardware / IoT",
     tags: ["ESP8266", "Blynk", "Python", "IoT"],
-    link: "#"
+    link: "#",
+    image: "https://images.unsplash.com/photo-1611270418597-a6c77f4b7271?w=800&q=80"
   },
   {
     num: "04",
     title: "AI RESCUE DRONE",
+    subtitle: "Autonomous Emergency Detection",
+    shortTitle: "Rescue Drone",
     desc: "Intelligent drone system with real-time object detection, GPS tracking, and live video streaming for search and rescue operations.",
+    challenge: "Rescue operations in hazardous or expansive terrain were inefficient and extremely dangerous for human respondents.",
+    resolution: "Programmed an automated drone framework leveraging OpenCV and TensorFlow to stream live feeds, recognize human signatures, and relay GPS coordinates instantly.",
+    role: "Computer Vision Engineer",
+    category: "Robotics / AI",
     tags: ["Python", "OpenCV", "TensorFlow", "Drone Tech"],
-    link: "#"
+    link: "#",
+    image: "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=800&q=80"
   },
   {
     num: "05",
     title: "CARBON FOOTPRINT TRACKER",
+    subtitle: "Real-time Emissions Analytics",
+    shortTitle: "Carbon Tracker",
     desc: "AI-driven platform that monitors environmental impact with real-time analytics, classification levels, and community-based insights.",
+    challenge: "Individuals had no accessible or accurate way to estimate their daily carbon emissions based on transit and purchases.",
+    resolution: "Created an ML-driven React platform processing vast behavioral models to output real-time emission estimates and suggest actionable footprint reduction strategies.",
+    role: "Frontend & Data Engineer",
+    category: "Web App",
     tags: ["React", "Python", "ML", "Data Visualization"],
-    link: "#"
-  }
+    link: "#",
+    image: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800&q=80"
+  },
 ];

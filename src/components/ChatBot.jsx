@@ -1,219 +1,303 @@
-import { useState, useRef, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
+import { useState, useRef, useEffect } from "react";
+import emailjs from "@emailjs/browser";
+import { portfolioChat, KB } from "./portfolioAI";
+import { Bot, BrainCircuit, X, Send, Sparkles, Terminal } from "lucide-react";
+
+// Render text with **bold**, bullet lines, and newlines
+function RichText({ text }) {
+  return (
+    <span style={{ whiteSpace: "pre-line", lineHeight: "1.6" }}>
+      {text.split("\n").map((line, li) => {
+        // Bold: **text**
+        const parts = line.split(/(\*\*[^*]+\*\*)/g);
+        return (
+          <span key={li}>
+            {parts.map((part, pi) =>
+              part.startsWith("**") && part.endsWith("**") ? (
+                <strong key={pi} style={{ color: "var(--accent)" }}>{part.slice(2, -2)}</strong>
+              ) : (
+                part
+              ),
+            )}
+            {li < text.split("\n").length - 1 && <br />}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+// Typing animation — streams text one character at a time
+function TypedMessage({ text, onDone }) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+  const idx = useRef(0);
+
+  useEffect(() => {
+    if (done) return;
+    const interval = setInterval(() => {
+      idx.current += 2; // 2 chars per tick for speed
+      setDisplayed(text.slice(0, idx.current));
+      if (idx.current >= text.length) {
+        clearInterval(interval);
+        setDone(true);
+        onDone?.();
+      }
+    }, 12);
+    return () => clearInterval(interval);
+  }, [text, done, onDone]);
+
+  return <RichText text={done ? text : displayed} />;
+}
 
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { 
-      id: 1, 
-      text: "Hey! 👋 I'm an AI assistant. How can I help you today?", 
-      sender: 'bot',
-      timestamp: new Date()
-    }
+    {
+      id: 1,
+      text: `System initialized. Welcome to the **${KB.name}** interactive terminal.\nAsk me about projects, skills, architectures, or how to get in contact.`,
+      sender: "bot",
+      typed: true, 
+      timestamp: new Date(),
+    },
   ]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [awaitingEmail, setAwaitingEmail] = useState(false);
+  const [showChips, setShowChips] = useState(true);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, isLoading]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading, isOpen, showChips]);
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [isOpen]);
 
-  const sendMessage = (e) => {
-    e.preventDefault();
-    
-    if (!inputValue.trim() || isLoading) {
-      return;
-    }
+  const markTyped = (id) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === id ? { ...m, typed: true } : m)),
+    );
+  };
 
-    const userInput = inputValue.toLowerCase();
+  const addBotMessage = (text) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        text,
+        sender: "bot",
+        typed: false,
+        timestamp: new Date(),
+      },
+    ]);
+  };
+
+  const handleEmailSend = async (msgText) => {
+    setAwaitingEmail(false);
+    try {
+      await emailjs.send(
+        "service_lop5e19",
+        "template_vc5sssm",
+        {
+          from_name: "Portfolio AI Terminal",
+          reply_to: "no-reply@portfolio.com",
+          message: msgText,
+          to_email: KB.email,
+        },
+        "Q3cjOkJvUA8O-KLMH",
+      );
+      addBotMessage(
+        `[SUCCESS] Message dynamically routed to ${KB.name}'s secure inbox. Expect a reply shortly.`,
+      );
+    } catch {
+      addBotMessage(
+        "[ERROR] SMTP connection failed. Please utilize the standard Contact section below.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const processInput = async (text) => {
+    if (!text.trim() || isLoading) return;
+
     const userMsg = {
       id: messages.length + 1,
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
+      text: text.trim(),
+      sender: "user",
+      typed: true,
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMsg]);
-    setInputValue('');
+    setMessages((prev) => [...prev, userMsg]);
+    setInputValue("");
     setIsLoading(true);
+    setShowChips(false);
 
-    // Handle sending message to email if we're in the email pipeline
     if (awaitingEmail) {
-      setAwaitingEmail(false);
-      
-      // Send via EmailJS
-      emailjs.send(
-        'service_lop5e19', // User provided Service ID
-        'template_vc5sssm', // User provided Template ID
-        {
-          from_name: "Portfolio Chatbot", // Sent from bot
-          reply_to: "no-reply@portfolio.com", 
-          message: inputValue,
-          to_email: "harshavarthanshan027@gmail.com"
-        },
-        'Q3cjOkJvUA8O-KLMH' // User Public Key
-      ).then(() => {
-        setMessages(prev => [...prev, {
-          id: prev.length + 1,
-          text: "✅ I've successfully sent your message directly to Harshavardhan's inbox!",
-          sender: 'bot',
-          timestamp: new Date()
-        }]);
-      }).catch((error) => {
-        console.error('Email sending failed:', error);
-        setMessages(prev => [...prev, {
-          id: prev.length + 1,
-          text: "Oops, something went wrong. You can also use the Contact form at the bottom of the page!",
-          sender: 'bot',
-          timestamp: new Date()
-        }]);
-      }).finally(() => {
-        setIsLoading(false);
-      });
+      handleEmailSend(text.trim());
       return;
     }
 
-    // Simulate bot response with simple keyword matching
-    setTimeout(() => {
-      let botResponse = "";
+    try {
+      const result = await portfolioChat(text.trim());
 
-      if (userInput.includes("about") || userInput.includes("who are you") || userInput.includes("profile")) {
-        botResponse = "I am Harshavardhan, an Artificial Intelligence and Machine Learning engineering student! I focus on building real-world systems connecting AI, IoT, and full-stack development to solve actual problems.";
-      } else if (userInput.includes("experience") || userInput.includes("internship") || userInput.includes("work")) {
-        botResponse = "I'm currently working as an AI & Data Science Intern! I have hands-on experience building data-driven systems, developing NLP models, and actively applying machine learning to practical scenarios.";
-      } else if (userInput.includes("project") || userInput.includes("portfolio") || userInput.includes("built")) {
-        botResponse = "I've built several exciting projects! Some highlights include: \n1) A multilingual farmer advisory platform with Aadhaar/UPI.\n2) A college enquiry chatbot using React and Flask.\n3) An IoT-based air/water quality monitoring system.\n4) An AI-powered rescue drone with object detection.";
-      } else if (userInput.includes("skill") || userInput.includes("technolog") || userInput.includes("stack")) {
-        botResponse = "My core technical stack includes Python, React, MongoDB, HTML/CSS/JavaScript, Machine Learning (TensorFlow/PyTorch), and IoT integrations. I love turning these tools into impactful solutions.";
-      } else if (userInput.includes("contact") || userInput.includes("hire") || userInput.includes("email") || userInput.includes("message")) {
-        botResponse = "I can send an email directly to Harshavardhan right now! Please type out the message you would like to send him:";
+      if (result.type === "contact") {
         setAwaitingEmail(true);
-      } else if (userInput.includes("hello") || userInput.includes("hi ") || userInput === "hi" || userInput.includes("hey")) {
-        botResponse = "Hello there! Feel free to ask me anything about my 'projects', 'experience', 'skills', or type 'message' to send me an email!";
-      } else if (userInput === "yes" && messages.length > 2) {
-        // If they just say yes, assume they want to send the previous unrecognized message
-        const previousMessage = messages[messages.length - 2].text;
-        
-        emailjs.send(
-          'service_lop5e19', 
-          'template_vc5sssm', 
-          {
-            from_name: "Portfolio Chatbot",
-            reply_to: "no-reply@portfolio.com",
-            message: previousMessage,
-            to_email: "harshavarthanshan027@gmail.com"
-          },
-          'Q3cjOkJvUA8O-KLMH'
-        ).then(() => {
-          setMessages(prev => [...prev, { id: prev.length + 1, text: "✅ Sent that directly to his inbox!", sender: 'bot', timestamp: new Date() }]);
-        });
-        
-        botResponse = null; // Prevent the default appended response
+        addBotMessage(
+          `Comms array opened. ✉️ Input your exact message parameters and I will route them straight to ${KB.name}'s inbox automatically.`,
+        );
       } else {
-        const fallbacks = [
-          "I'm not exactly sure what you mean. Would you like me to forward that to Harshavardhan's email? (Type 'yes' to send it)",
-          "I'm still learning! If you'd like, type 'message' and I can email him directly for you."
-        ];
-        botResponse = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        addBotMessage(result.text);
       }
-
-      if (botResponse) {
-        setMessages(prev => [...prev, {
-          id: prev.length + 1,
-          text: botResponse,
-          sender: 'bot',
-          timestamp: new Date()
-        }]);
-      }
-
+    } catch (e) {
+      console.error(e);
+      addBotMessage(
+        "Network connection failed. Answer is not found, but my creator will improve me in a few days! 🤖",
+      );
+    } finally {
       setIsLoading(false);
-    }, 600);
+      setShowChips(true);
+    }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    processInput(inputValue);
+  };
+
+  const CHIPS = [
+    { label: "🚀 Projects", query: "What projects has he built?" },
+    { label: "💻 Skills", query: "What are his skills?" },
+    { label: "🎓 Education", query: "Tell me about his education" },
+    { label: "📩 Contact", query: "contact" },
+  ];
 
   return (
     <>
-      {/* Floating Chat Button */}
+      {/* Floating abstract button */}
       <button
-        className="chat-button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle chat"
+        className={`chat-glass-btn ${isOpen ? 'active' : ''}`}
+        onClick={() => setIsOpen((o) => !o)}
+        aria-label="Toggle AI terminal"
       >
-        <span>{isOpen ? '✕' : '💬'}</span>
+        {isOpen ? <X size={24} /> : <Bot size={24} />}
+        {!isOpen && <span className="chat-btn-pulse" />}
       </button>
 
-      {/* Chat Window */}
-      {isOpen && (
-        <div className="chat-window">
-          {/* Header */}
-          <div className="chat-header">
-            <h3 className="chat-title">AI Assistant</h3>
-            <button
-              className="close-button"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close chat"
-            >
-              ✕
+      {/* Chat Terminal Window */}
+      <div className={`chat-terminal-overlay ${isOpen ? 'open' : ''}`}>
+        <div className="chat-terminal-base">
+          {/* Glass Header */}
+          <div className="terminal-header">
+            <div className="terminal-header-left">
+              <div className="terminal-icon-box">
+                <BrainCircuit size={18} className="spin-slow" />
+              </div>
+              <div className="terminal-title-stack">
+                <h3 className="terminal-title">AGENT.SYS <Sparkles size={12} style={{marginLeft: 4, color: 'var(--accent)'}}/></h3>
+                <span className="terminal-status">
+                  <span className="dot pulse"></span> LINK ESTABLISHED
+                </span>
+              </div>
+            </div>
+            <button className="terminal-close" onClick={() => setIsOpen(false)}>
+              <X size={18} />
             </button>
           </div>
 
-          {/* Messages Container */}
-          <div className="chat-messages-container">
+          {/* Messages Wrapper */}
+          <div className="terminal-messages-list">
+            <div className="terminal-intro-stamp">ENCRYPTED CONNECTION ACCEPTED</div>
+            
             {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`chat-message ${msg.sender}-message`}
-              >
-                <div className="message-bubble">
-                  {msg.text}
+              <div key={msg.id} className={`terminal-message ${msg.sender}-msg`}>
+                {msg.sender === "bot" && (
+                  <div className="msg-avatar-icon">
+                    <Terminal size={14} />
+                  </div>
+                )}
+                
+                <div className="msg-bubble-content">
+                  {msg.sender === "bot" && !msg.typed ? (
+                    <TypedMessage
+                      text={msg.text}
+                      onDone={() => markTyped(msg.id)}
+                    />
+                  ) : (
+                    <RichText text={msg.text} />
+                  )}
                 </div>
               </div>
             ))}
 
             {isLoading && (
-              <div className="chat-message bot-message">
-                <div className="message-bubble typing-indicator">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+              <div className="terminal-message bot-msg">
+                <div className="msg-avatar-icon">
+                  <Terminal size={14} />
+                </div>
+                <div className="msg-bubble-content typing-wave">
+                  <span className="wave-dot"></span>
+                  <span className="wave-dot"></span>
+                  <span className="wave-dot"></span>
                 </div>
               </div>
             )}
 
-            <div ref={messagesEndRef} />
+            <div ref={messagesEndRef} style={{ height: "4px" }} />
           </div>
 
-          {/* Input Form */}
-          <form onSubmit={sendMessage} className="chat-input-form">
-            <input
-              ref={inputRef}
-              type="text"
-              className="chat-input"
-              placeholder="Type a message..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              disabled={isLoading}
-            />
+          {/* Suggestion Control Deck */}
+          {showChips && !isLoading && (
+            <div className="terminal-control-deck">
+              <div className="deck-track">
+                {CHIPS.map((c) => (
+                  <button
+                    key={c.label}
+                    className="deck-chip"
+                    onClick={() => processInput(c.query)}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Input Console */}
+          <form onSubmit={handleSubmit} className="terminal-input-console">
+            <div className="console-input-wrapper">
+              <div className="console-prompt">&gt;</div>
+              <input
+                ref={inputRef}
+                type="text"
+                className="console-input-field"
+                placeholder={
+                  awaitingEmail
+                    ? `Awaiting message parameters...`
+                    : "Initialize prompt..."
+                }
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                disabled={isLoading}
+                autoComplete="off"
+              />
+            </div>
             <button
               type="submit"
-              className="send-button"
-              disabled={isLoading}
+              className="console-exec-btn"
+              disabled={isLoading || !inputValue.trim()}
             >
-              Send
+              <Send size={16} />
             </button>
           </form>
         </div>
-      )}
+      </div>
     </>
   );
 }

@@ -1,164 +1,424 @@
-/* PROJECTS */
+/* PROJECTS BENTO GRID */
 .projects-section {
   background: var(--bg2);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  overflow: hidden;
 }
 
-.projects-grid {
+.bento-out-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
   margin-top: 40px;
 }
 
-.project-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 36px 32px;
+.bento-card {
   position: relative;
+  height: 480px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
   overflow: hidden;
-  transition: all 0.4s;
   cursor: pointer;
+  background: #000;
+  transition: transform 0.4s ease, box-shadow 0.4s;
 }
 
-.project-card::after {
-  content: '';
+.bento-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+}
+
+.bento-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  transition: opacity 0.4s, transform 0.5s ease;
+}
+
+.bento-card:hover .bento-bg {
+  opacity: 0.4;
+  transform: scale(1.05);
+}
+
+.bento-overlay {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent2), var(--accent));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  pointer-events: none;
 }
 
-.project-card:hover {
-  background: var(--card-bg);
-  transform: translateY(-4px);
-  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-}
-
-.project-card:hover::after { transform: scaleX(1); }
-
-.project-num {
-  font-family: 'JetBrains Mono', monospace;
+.bento-tag {
+  align-self: flex-start;
+  font-family: "JetBrains Mono", monospace;
   font-size: 11px;
-  letter-spacing: 3px;
-  color: var(--muted);
-  margin-bottom: 24px;
-}
-
-.project-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px;
-  letter-spacing: 2px;
-  line-height: 1;
-  margin-bottom: 20px;
-  transition: color 0.3s;
-}
-
-.project-card:hover .project-title { color: var(--accent); }
-
-.project-desc {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--muted);
-  margin-bottom: 32px;
-}
-
-.project-tags {
-  display: flex; flex-wrap: wrap; gap: 8px;
-}
-
-.project-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
-  padding: 4px 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--tag-bg);
   border: 1px solid var(--border);
-  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 20px;
+  letter-spacing: 2px;
   text-transform: uppercase;
 }
 
-.project-arrow {
+.bento-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-title {
+  font-family: Georgia, serif;
+  font-size: 42px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.bento-subtitle {
+  font-family: "Syne", sans-serif;
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 24px;
+}
+
+.bento-action {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.bento-icon-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+}
+
+.bento-card:hover .bento-icon-btn {
+  transform: scale(1.1) rotate(45deg);
+  box-shadow: 0 0 15px rgba(124, 92, 252, 0.4);
+}
+
+/* MODAL / INSIDE BENTO */
+.bento-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeInModal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bento-modal-content {
+  position: relative;
+  background: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.9);
+  transform: translateY(20px) scale(0.98);
+  animation: slideUpModal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUpModal {
+  to { transform: translateY(0) scale(1); }
+}
+
+.modal-hero {
+  position: relative;
+  height: 360px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-hero-bg {
   position: absolute;
-  bottom: 32px; right: 32px;
-  font-size: 24px;
-  color: var(--muted);
-  transition: all 0.3s;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
 }
 
-.project-card:hover .project-arrow {
+.modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.3s;
+}
+
+.modal-close:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.modal-hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.badge-highlight {
+  background: var(--tag-bg);
   color: var(--accent);
-  transform: translate(4px, -4px);
+  padding: 6px 12px;
 }
 
-/* Mobile Projects */
+.badge-id {
+  color: rgba(255,255,255,0.4);
+  padding: 6px 12px;
+}
+
+.hero-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.hero-titles h2 {
+  font-family: Georgia, serif;
+  font-size: 64px;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.hero-titles p {
+  font-size: 16px;
+  color: #a0a0a0;
+  font-family: "Syne", sans-serif;
+  max-width: 500px;
+}
+
+.launch-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  background: var(--card-bg);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 2px;
+}
+
+.launch-btn:hover {
+  background: var(--tag-bg);
+  box-shadow: 0 0 20px rgba(124, 92, 252, 0.3);
+  transform: translateY(-2px);
+}
+
+.modal-inner-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 40px;
+}
+
+.modal-grid-box {
+  background: #141414;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-grid-box.wide {
+  grid-column: span 2;
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #777;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.box-icon.color-red { color: #ff4757; }
+.box-icon.color-green { color: #2ed573; }
+.box-icon.color-blue { color: #1e90ff; }
+
+.box-text {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #e0e0e0;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-tags span {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  padding: 6px 12px;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
+  color: #ccc;
+}
+
+.box-small-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 2px;
+}
+
+.box-strong {
+  font-family: "Syne", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
 @media (max-width: 1024px) {
-  .projects-grid {
+  .bento-out-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-inner-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .modal-grid-box.wide {
+    grid-column: span 2;
   }
 }
 
 @media (max-width: 768px) {
-  .projects-grid {
+  .modal-hero {
+    height: auto;
+    padding-bottom: 32px;
+  }
+  .hero-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 100px;
+  }
+  .hero-titles h2 {
+    font-size: 40px;
+  }
+  .modal-inner-grid {
     grid-template-columns: 1fr;
-    gap: 1px;
-    margin-top: 30px;
+    gap: 16px;
+    padding: 24px;
   }
-
-  .project-card {
-    padding: 28px 20px;
-  }
-
-  .project-title {
-    font-size: 24px;
-  }
-
-  .project-desc {
-    font-size: 12px;
-    margin-bottom: 24px;
-  }
-
-  .project-num {
-    font-size: 10px;
-    margin-bottom: 16px;
-  }
-
-  .project-tags {
-    gap: 6px;
-  }
-
-  .project-tag {
-    font-size: 9px;
-    padding: 3px 10px;
-  }
-
-  .project-arrow {
-    bottom: 20px;
-    right: 20px;
-    font-size: 20px;
+  .modal-grid-box.wide {
+    grid-column: span 1;
   }
 }
 
 @media (max-width: 480px) {
-  .project-card {
-    padding: 20px 16px;
+  .bento-card {
+    height: 380px;
   }
-
-  .project-title {
-    font-size: 18px;
-    margin-bottom: 16px;
+  .bento-overlay {
+    padding: 24px;
   }
-
-  .project-desc {
-    font-size: 11px;
-    line-height: 1.6;
-    margin-bottom: 16px;
+  .bento-title {
+    font-size: 32px;
   }
-
-  .project-arrow {
-    font-size: 18px;
+  .bento-subtitle {
+    font-size: 12px;
+  }
+  .bento-action span {
+    font-size: 10px;
+  }
+  .hero-bottom {
+    margin-top: 80px;
+  }
+  .hero-titles h2 {
+    font-size: 28px;
+  }
+  .hero-titles p {
+    font-size: 13px;
+  }
+  .modal-hero-content {
+    padding: 24px;
+  }
+  .modal-inner-grid {
+    padding: 16px;
+    gap: 12px;
+  }
+  .modal-grid-box {
+    padding: 20px;
+  }
+  .tech-tags span {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+  .launch-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
