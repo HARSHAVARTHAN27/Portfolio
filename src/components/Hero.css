@@ -176,8 +176,8 @@
   animation: heroPulseGlow 4s ease-in-out infinite alternate;
 }
 .hero-name .line2 {
-  -webkit-text-stroke: 2px var(--accent2);
   color: transparent;
+  -webkit-text-stroke: 1px var(--accent2); 
   display: block;
   animation: heroPulseStroke 4s ease-in-out infinite alternate 1s; /* delayed cascade */
 }
@@ -193,10 +193,10 @@
 
 @keyframes heroPulseStroke {
   0% {
-    filter: drop-shadow(0 0 2px var(--accent2)) drop-shadow(0 0 6px rgba(124, 92, 252, 0.3));
+    text-shadow: 0 0 4px rgba(124, 92, 252, 0.3), 0 0 8px rgba(124, 92, 252, 0.2);
   }
   100% {
-    filter: drop-shadow(0 0 4px var(--accent2)) drop-shadow(0 0 12px rgba(124, 92, 252, 0.7));
+    text-shadow: 0 0 15px var(--accent2), 0 0 25px rgba(124, 92, 252, 0.6);
   }
 }
 .hero-name .line3 {
@@ -452,9 +452,10 @@
   }
 
   .hero-name {
-    font-size: clamp(48px, 12vw, 120px);
+    font-size: clamp(64px, 16vw, 140px);
+    line-height: 0.9;
     letter-spacing: -1px;
-    text-align: center;
+    text-align: left;
     margin-top: 24px;
   }
 
@@ -511,7 +512,8 @@
   }
 
   .hero-name {
-    font-size: clamp(36px, 10vw, 80px);
+    font-size: clamp(56px, 16vw, 100px);
+    line-height: 0.9;
   }
 
   .hero-tag {
